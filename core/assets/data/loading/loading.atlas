@@ -1,0 +1,33 @@
+
+loading.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+beefgames
+  rotate: false
+  xy: 1, 330
+  size: 600, 400
+  orig: 600, 400
+  offset: 0, 0
+  index: -1
+steak
+  rotate: false
+  xy: 1, 33
+  size: 516, 295
+  orig: 516, 295
+  offset: 0, 0
+  index: -1
+borderv1
+  rotate: false
+  xy: 603, 680
+  size: 320, 50
+  orig: 320, 50
+  offset: 0, 0
+  index: -1
+barv1
+  rotate: false
+  xy: 1, 1
+  size: 300, 30
+  orig: 300, 30
+  offset: 0, 0
+  index: -1
