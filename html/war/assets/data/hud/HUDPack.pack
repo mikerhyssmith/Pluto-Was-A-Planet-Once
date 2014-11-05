@@ -1,0 +1,138 @@
+
+HUDPack.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+touchBackground
+  rotate: false
+  xy: 1, 207
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+shootButtonDown
+  rotate: false
+  xy: 1, 55
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+shootButtonUp
+  rotate: false
+  xy: 303, 357
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+mapBorder
+  rotate: false
+  xy: 153, 67
+  size: 138, 138
+  orig: 138, 138
+  offset: 0, 0
+  index: -1
+mapBackground
+  rotate: false
+  xy: 303, 227
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+armourBar
+  rotate: false
+  xy: 1, 33
+  size: 200, 20
+  orig: 200, 20
+  offset: 0, 0
+  index: -1
+healthBar
+  rotate: false
+  xy: 1, 11
+  size: 200, 20
+  orig: 200, 20
+  offset: 0, 0
+  index: -1
+nuke#0
+  rotate: false
+  xy: 203, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+movementKnob
+  rotate: false
+  xy: 433, 280
+  size: 75, 75
+  orig: 75, 75
+  offset: 0, 0
+  index: -1
+weaponKnob
+  rotate: false
+  xy: 433, 203
+  size: 75, 75
+  orig: 75, 75
+  offset: 0, 0
+  index: -1
+nuke#1
+  rotate: false
+  xy: 269, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+pause
+  rotate: false
+  xy: 455, 465
+  size: 42, 42
+  orig: 42, 42
+  offset: 0, 0
+  index: -1
+nuke#2
+  rotate: false
+  xy: 303, 161
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+nuke#3
+  rotate: false
+  xy: 293, 95
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+weaponBar
+  rotate: false
+  xy: 1, 1
+  size: 64, 8
+  orig: 64, 8
+  offset: 0, 0
+  index: -1
+planetDot
+  rotate: false
+  xy: 455, 441
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+enemyDot
+  rotate: false
+  xy: 293, 197
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+playerDot
+  rotate: false
+  xy: 293, 187
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+tokenDot
+  rotate: false
+  xy: 293, 177
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1

@@ -38,19 +38,18 @@ public class EndGameScreen implements Screen{
 	private TextButtonStyle style;
 	private TextButton replay,leaderBoards;
 	private Table buttons,statsContainer;
-	private int gameModeID,wavesSurvived,score;
+	private int wavesSurvived,score;
 	private BackgroundHandler background;
 	private Screen gs;
 	
 	
-	public EndGameScreen(Screen gs,PlutoWasAPlanetOnce game,int kills,int wavesSurvived, int moneySpent,String time,int gameModeID,int score) 
+	public EndGameScreen(Screen gs,PlutoWasAPlanetOnce game,int kills,int wavesSurvived, int moneySpent,String time,int score) 
 	{
 		this.score = score;
 		this.game = game;
 		this.kills = kills;
 		this.moneySpent = moneySpent;
 		this.time = time;
-		this.gameModeID = gameModeID;
 		this.wavesSurvived = wavesSurvived;
 		this.gs = gs;
 	}

@@ -24,8 +24,6 @@ public class TimeHandler {
 		int minutes = (int) seconds / 60;
 		int remainder = (int) seconds%60;
 		
-		
-		
 		String timeReturn = ( minutes + ":" + remainder);
 		return timeReturn;
 		

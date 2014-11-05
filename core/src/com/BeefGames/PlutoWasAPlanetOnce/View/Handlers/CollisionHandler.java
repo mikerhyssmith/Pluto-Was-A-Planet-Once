@@ -38,14 +38,12 @@ public class CollisionHandler
 	private AudioHandler audioHandler;
 	private Ship ship;
 	Vector2 worldSize;
-	private Boolean android = false;
-	private PlutoWasAPlanetOnce game;
 	private boolean lost = false;
 	
 
 	
 	
-	public CollisionHandler(PlutoWasAPlanetOnce game,Pixmap planetMap, Array<Enemy> enemies, Planet planet, WorldRenderer worldRenderer,World world,TokenManager tm,ParticleHandler particleHandler,Ship ship)
+	public CollisionHandler(Pixmap planetMap, Array<Enemy> enemies, Planet planet, WorldRenderer worldRenderer,World world,TokenManager tm,ParticleHandler particleHandler,Ship ship)
 	{
 		pixHandler = new PixmapHandler(planetMap);
 		
@@ -53,7 +51,6 @@ public class CollisionHandler
 		pixelColour = new Color();
 		this.world = world;
 		tokenManager = tm;
-		this.game = game;
 		
 		this.particleHandler = particleHandler;
 		audioHandler = world.getAudioHandler();

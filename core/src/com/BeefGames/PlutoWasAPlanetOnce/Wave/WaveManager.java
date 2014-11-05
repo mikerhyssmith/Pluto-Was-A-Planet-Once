@@ -125,14 +125,6 @@ public class WaveManager
 			Follower f = new Follower(spawnManager.getPosition(),follower.getWidth(),follower.getHeight(), 0, 
 					spawnManager.getSpeed(),enemyhealth, enemyvalue, enemydamage,follower.getWidth(),follower.getHeight());
 			tempEnemies.add(f);
-
-			/**
-			renderer.addDrawn("enemy"+ f.hashCode(), "follower", f.getPosition(), new Vector2(f.getWidth()/2,f.getHeight()/2),
-					new Vector2(f.getWidth(),f.getHeight()), new Vector2(1,1),f.getRotation(), new Vector2(0,0), 
-					new Vector2(renderer.getTexture("follower").getWidth(),renderer.getTexture("follower").getHeight()),
-					false, false, false);
-					
-					*/
 			
 			Texture planetScout =  renderer.getTexture("PlanetScout");
 			
@@ -140,13 +132,6 @@ public class WaveManager
 					spawnManager.getSpeed(),planetLocation,enemyhealth, enemyvalue, enemydamage,  planetScout.getWidth(), planetScout.getHeight());
 			tempEnemies.add(p);		
 
-			/**
-			renderer.addDrawn("enemy"+ p.hashCode(), "planetscout", p.getPosition(), new Vector2(p.getWidth()/2,p.getHeight()/2),
-					new Vector2(p.getWidth(),p.getHeight()), new Vector2(1,1),p.getRotation(), new Vector2(0,0), 
-					new Vector2(renderer.getTexture("planetscout").getWidth(),renderer.getTexture("planetscout").getHeight()),
-					false, false, false);
-					
-					*/
 			
 			Texture soldier = renderer.getTexture("Soldier");
 			
@@ -154,27 +139,12 @@ public class WaveManager
 					spawnManager.getSpeed(),planetLocation,enemyhealth, enemyvalue, enemydamage,soldier.getWidth(), soldier.getHeight());
 			tempEnemies.add(s);
 
-			/**
-			renderer.addDrawn("enemy"+ s.hashCode(), "soldier", s.getPosition(), new Vector2(s.getWidth()/2,s.getHeight()/2),
-					new Vector2(s.getWidth(),s.getHeight()), new Vector2(1,1),s.getRotation(), new Vector2(0,0), 
-					new Vector2(renderer.getTexture("soldier").getWidth(),renderer.getTexture("soldier").getHeight()),
-					false, false, false);
-					
-					*/
 			
 			Texture sniper = renderer.getTexture("Sniper");
 			
 			Sniper sn = new Sniper(spawnManager.getPosition(),sniper.getWidth(),sniper.getHeight(), 0, 
 					spawnManager.getSpeed(),enemyhealth, enemyvalue, enemydamage,world,sniper.getWidth(),sniper.getHeight());
 			tempEnemies.add(sn);
-
-			/**
-			renderer.addDrawn("enemy"+ sn.hashCode(), "Sniper", sn.getPosition(), new Vector2(sn.getWidth()/2,sn.getHeight()/2),
-					new Vector2(sn.getWidth(),sn.getHeight()), new Vector2(1,1),sn.getRotation(), new Vector2(0,0), 
-					new Vector2(renderer.getTexture("Sniper").getWidth(),renderer.getTexture("Sniper").getHeight()),
-					false, false, false);
-					
-					*/
 			
 			if(debug)
 			{

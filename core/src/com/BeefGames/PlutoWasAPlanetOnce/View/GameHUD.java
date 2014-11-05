@@ -4,11 +4,11 @@ import com.BeefGames.PlutoWasAPlanetOnce.PlutoWasAPlanetOnce;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Ship;
 import com.BeefGames.PlutoWasAPlanetOnce.Screens.EndGameScreen;
 import com.BeefGames.PlutoWasAPlanetOnce.Screens.GameScreen;
-import com.BeefGames.PlutoWasAPlanetOnce.Screens.UpgradesScreen2;
+import com.BeefGames.PlutoWasAPlanetOnce.Screens.UpgradesScreen;
 import com.BeefGames.PlutoWasAPlanetOnce.Upgrades.Nuke;
+import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.InputHandler;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.MinimapHandler;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.TimeHandler;
-import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.TouchPadHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -23,12 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -39,7 +35,7 @@ public class GameHUD {
 	private World gameWorld;
 	private Ship ship;
 	private WorldRenderer worldRenderer;
-	private boolean lost,android;
+	private boolean lost;
 	
 	private Stage hudStage;
 	private TextureAtlas hudAtlas;
@@ -60,19 +56,14 @@ public class GameHUD {
 	private TextureRegion wbarPart;
 	
 	//Shooting
-	private Image shootButton;
 	private Boolean shoot = false;
 	
 	//Variables for text on HUD
 	private BitmapFont hudFont;
 	private Label turretAmmo,time, gameLost, endofWave, killsLabel, moneyLabel, timeLabel, cooldownLabel;
 
-	//Variables for touchpad
-	private Skin touchpadSkin;
-	private Drawable touchBackground, moveKnob;
-	private TouchpadStyle movePadStyle;
-	private Touchpad movePad;
-	private TouchPadHandler movePadHandler;
+
+	private InputHandler inputHandler;
 	
 	private int kills;
 	private long actionBeginTime;
@@ -194,30 +185,9 @@ public class GameHUD {
 		timeLabel.setAlignment(Align.center);
 		timeLabel.setVisible(false);
 		hudStage.addActor(timeLabel);
-		
-	    touchpadSkin = new Skin();
-	    //Set background image
-	    touchpadSkin.add("touchBackground", new TextureRegion (hudAtlas.findRegion("touchBackground")) );
-	    //Set knob images
-	    touchpadSkin.add("moveKnob",new TextureRegion ( hudAtlas.findRegion("movementKnob")));
-	    //Create TouchPad Styles
-	    movePadStyle = new TouchpadStyle();   
-
-	    //Create Drawables from TouchPad skins
-	    touchBackground = touchpadSkin.getDrawable("touchBackground");
-	    moveKnob = touchpadSkin.getDrawable("moveKnob");
-	    //Apply the Drawables to the TouchPad Styles
-	    movePadStyle.background = touchBackground;
-	    movePadStyle.knob = moveKnob;
-	    
-	    //Create new TouchPads with the created styles
-	    movePad = new Touchpad(10, movePadStyle);
-	    movePad.setBounds(touchBackground.getMinWidth()/20, touchBackground.getMinHeight()/20,
-	    		width/4, ((width/4) / touchBackground.getMinWidth()) *touchBackground.getMinHeight() );	    
-
-	    hudStage.addActor(movePad);
+		 
 	
-	    movePadHandler = new TouchPadHandler(movePad,ship);
+	    inputHandler = new InputHandler(world);
 
 	    SetInput(world.getInputHandler());
 	    
@@ -269,25 +239,6 @@ public class GameHUD {
 			}
 	    });
 
-	    shootButton = new Image(hudAtlas.findRegion("shootButtonUp"));
-	    shootButton.setPosition(width - (movePad.getX() +  (movePad.getWidth()/2) ) - (shootButton.getWidth()/2), 
-	    		movePad.getY() + (movePad.getWidth()/2) - (shootButton.getHeight()/2));
-	   hudStage.addActor(shootButton);
-	    shootButton.addListener(new InputListener()
-	    {
-	    	public boolean touchDown(InputEvent event, float x,float y , int pointer, int button)
-	    	{ 
-	    		shoot = true;
-	    		shootButton.setDrawable(new TextureRegionDrawable(hudAtlas.findRegion("shootButtonDown")));
-    			return true; 
-	    	}
-	    	
-			public void touchUp(InputEvent event, float x,float y , int pointer, int button)
-			{
-				shoot = false;
-	    		shootButton.setDrawable(new TextureRegionDrawable(hudAtlas.findRegion("shootButtonUp")));
-			}
-	    });
 	    
 	    //Set up nuke button
 	    nukeButton = new Image(new TextureRegionDrawable(hudAtlas.findRegion("nuke#0")));
@@ -338,26 +289,14 @@ public class GameHUD {
 		//Print losing text when the game ends
 	    lost = gameWorld.getStatus();
 	    if(lost && gameLost.isVisible() == false ){
-	    	boolean scoreSubmitted = false;
-	    	
-	    	if(gameWorld.getGameMode() ==0){
-		    	scoreSubmitted = true;
-		    	}
-		    	else if (gameWorld.getGameMode() == 1){;
-				scoreSubmitted = true;
-		    	}
-		    	else{
-			    scoreSubmitted = true;
-		    	}
-	    
 
 	    	//game.getScreen().dispose();
 	    	if(gameWorld.getGameMode() ==1){
-		    	game.setScreen(new EndGameScreen(game.getScreen(),game,gameWorld.getTotalKills(),gameWorld.getLevel(),gameWorld.getMoneySpent(),timeHandler.getFormattedTime(timeHandler.getTime()),gameWorld.getGameMode(),gameWorld.getLevel()));
+		    	game.setScreen(new EndGameScreen(game.getScreen(),game,gameWorld.getTotalKills(),gameWorld.getLevel(),gameWorld.getMoneySpent(),timeHandler.getFormattedTime(timeHandler.getTime()),gameWorld.getLevel()));
 
 	    		
 	    	}else{
-	    	game.setScreen(new EndGameScreen(game.getScreen(),game,gameWorld.getTotalKills(),gameWorld.getLevel(),gameWorld.getMoneySpent(),timeHandler.getFormattedTime(timeHandler.getTime()),gameWorld.getGameMode(),calculateScore()));
+	    	game.setScreen(new EndGameScreen(game.getScreen(),game,gameWorld.getTotalKills(),gameWorld.getLevel(),gameWorld.getMoneySpent(),timeHandler.getFormattedTime(timeHandler.getTime()),calculateScore()));
 	    	}
 	    	}
 	    	
@@ -419,7 +358,7 @@ public class GameHUD {
 	    		
 	    		gameWorld.removeAllBullets();
 	    		
-	    		game.setScreen(new UpgradesScreen2(game,game.getScreen(),gameWorld));
+	    		game.setScreen(new UpgradesScreen(game,game.getScreen(),gameWorld));
 	    	}
 	    }
 	    
@@ -443,7 +382,7 @@ public class GameHUD {
 	    }
 		
 	   //Check for shooting
-	    movePadHandler.move();
+	    inputHandler.move();
 	    if(currentCooldown >= shipCooldown)
 	    {
 	    	currentCooldown = shipCooldown;

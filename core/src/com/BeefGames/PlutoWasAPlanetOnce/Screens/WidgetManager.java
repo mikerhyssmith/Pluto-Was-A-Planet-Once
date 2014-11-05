@@ -20,9 +20,9 @@ public class WidgetManager  {
 	private UpgradeManager upgradeManager;
 	private Table container,weaponContainer;
 	private Label description,cost,damageCost,speedCost;
-	private int costMoney,damageCostMoney,speedCostMoney;
+	private int costMoney;
 	private Texture nuke,armour,health,weapon,protection,turret,table;
-	private Image tableImage,nukeImage,upgradeLogo,healthImage,armourImage,protectionImage,turretImage,weaponImage;
+	private Image nukeImage,upgradeLogo,healthImage,armourImage,protectionImage,turretImage,weaponImage;
 	private Image logo[];
 	private TextButton upgradeButton,weaponDamage,weaponSpeed;
 	private Skin skin,uiSkin;
@@ -50,8 +50,6 @@ public class WidgetManager  {
 		turret = assetManager.get("data/upgrades/turretIcon.png",Texture.class);
 		weapon = assetManager.get("data/upgrades/weaponIcon.png",Texture.class);
 		
-		table = new Texture(Gdx.files.internal("data/tablebackground.png"));
-		tableImage = new Image(table);
 		nukeImage = new Image(nuke);
 		healthImage = new Image(health);
 		armourImage = new Image(armour);
@@ -125,8 +123,6 @@ public class WidgetManager  {
 	public Table getWeaponTable(){
 		upgradeLogo = getlogo(5);
 		description = new Label(getDescription(5),uiSkin);
-		damageCostMoney = getCost(5);
-		speedCostMoney = getCost(6);
 		damageCost = new Label("Cost: "+ getCost(5),uiSkin);
 		speedCost = new Label("Cost: "+ getCost(6),uiSkin);
 		description = new Label(getDescription(5),uiSkin);

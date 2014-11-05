@@ -10,13 +10,12 @@ import com.BeefGames.PlutoWasAPlanetOnce.Model.Ship;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemies.Elite;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemies.Sniper;
 import com.BeefGames.PlutoWasAPlanetOnce.Screens.GameScreen;
-import com.BeefGames.PlutoWasAPlanetOnce.Screens.UpgradesScreen2;
+import com.BeefGames.PlutoWasAPlanetOnce.Screens.UpgradesScreen;
 import com.BeefGames.PlutoWasAPlanetOnce.Tokens.Token;
 import com.BeefGames.PlutoWasAPlanetOnce.Tokens.TokenManager;
 import com.BeefGames.PlutoWasAPlanetOnce.Upgrades.ProtectionBubble;
 import com.BeefGames.PlutoWasAPlanetOnce.Upgrades.Turret;
 import com.BeefGames.PlutoWasAPlanetOnce.Upgrades.UpgradeManager;
-import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.AccellerometerHandler;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.AudioHandler;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.CollisionHandler;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.InputHandler;
@@ -56,7 +55,6 @@ public class World
 
 	// Controllers
 	private WaveManager wavemanager;
-	private AccellerometerHandler accelhandler;
 	private WorldRenderer worldRenderer;
 	private InputHandler inputHandler;
 	private CollisionHandler collisionHandler;
@@ -73,7 +71,7 @@ public class World
 	private int gameStatus;
 	
 	private GameScreen gameScreen;
-	private UpgradesScreen2 upgradesScreen;
+	private UpgradesScreen upgradesScreen;
 
 	Texture circleTexture, explosionCircle;
 	Sprite circle, explosionCircleSprite;
@@ -113,7 +111,6 @@ public class World
 		
 		// Set up handlers
 		audioHandler = game.getAudioHandler();
-		accelhandler = new AccellerometerHandler(this);
 	
 		//Used by the renderer to colour stars red if the mode is nightmare
 		Boolean nightmare;
@@ -176,7 +173,7 @@ public class World
 		
 		wavemanager.createWave(planet.getPosition(), level, difficulty, debug);
 		
-		upgradesScreen = new UpgradesScreen2(game,gameScreen,this);
+		upgradesScreen = new UpgradesScreen(game,gameScreen,this);
 		tokenManager = new TokenManager(worldRenderer,this);
 		
 		if(debug)
@@ -189,7 +186,7 @@ public class World
 		turretBullets = new Array<Bullet>();
 		enemyBullets = new Array<Bullet>();
 		
-		collisionHandler = new CollisionHandler(game,game.getAssetManager().get("data/world/planetfinal.png", Pixmap.class),
+		collisionHandler = new CollisionHandler(game.getAssetManager().get("data/world/planetfinal.png", Pixmap.class),
 				es, planet, worldRenderer,this,tokenManager,particleHandler,ship);
 		
 		moneyBefore = ship.getMoney();
@@ -204,8 +201,6 @@ public class World
 		}
 		else{
 			upgradeManager = new UpgradeManager(this,game,false);
-
-			
 		}
 	}
 
@@ -467,7 +462,7 @@ public class World
 	public int getLevel(){
 		return level;
 	}
-	public UpgradesScreen2 getUpgradesScreen(){
+	public UpgradesScreen getUpgradesScreen(){
 		return upgradesScreen;
 	}
 	public void setProtectionBubble(ProtectionBubble pb){

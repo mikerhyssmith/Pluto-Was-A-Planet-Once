@@ -14,7 +14,7 @@ public class InputHandler implements InputProcessor{
 
 	private Array<Nuke> nukeArray;
 	private BulletHandler bulletHandler;
-	//private ParticleHandler particleHandler;
+	private boolean keydown = false;
 
 	
 	public InputHandler(World world){
@@ -22,7 +22,6 @@ public class InputHandler implements InputProcessor{
 		ship = world.getShip();
 		nukeArray = new Array<Nuke>();
 		bulletHandler = new BulletHandler(world);
-		//particleHandler = world.getParticleHandler();
 	}
 	
 	@Override
@@ -30,15 +29,19 @@ public class InputHandler implements InputProcessor{
 		switch(keycode){
 		case Keys.W:
 			ship.getForce().y = ship.getForceMult();
+			keydown = true;
 			break;
 		case Keys.S:
 			ship.getForce().y = -ship.getForceMult();
+			keydown = true;
 			break;
 		case Keys.A:
 			ship.getForce().x = -ship.getForceMult();
+			keydown = true;
 			break;
 		case Keys.D:
 			ship.getForce().x = ship.getForceMult();
+			keydown = true;
 			break;
 		case Keys.N:
 			/*
@@ -69,18 +72,22 @@ public class InputHandler implements InputProcessor{
 		case Keys.W:
 			if(ship.getForce().y == ship.getForceMult())
 				ship.getForce().y = 0;
+			keydown = false;
 			break;
 		case Keys.S:
 			if(ship.getForce().y == -ship.getForceMult())
 				ship.getForce().y = 0;
+			keydown = false;
 			break;
 		case Keys.A:
 			if(ship.getForce().x == -ship.getForceMult())
 				ship.getForce().x = 0;
+			keydown = false;
 			break;
 		case Keys.D:
 			if(ship.getForce().x == ship.getForceMult())
 				ship.getForce().x = 0;
+			keydown = false;
 			break;
 		default:
 			break;
@@ -143,6 +150,20 @@ public class InputHandler implements InputProcessor{
 	public BulletHandler getBulletHandler()
 	{
 		return bulletHandler;
+	}
+	public void move()
+	{
+		if(keydown = true)
+		{
+			ship.setMove(true);
+		}
+		else
+		{
+			ship.setMove(false);
+		}
+		
+		//ship.setForce(new Vector2(touchpad.getKnobPercentX()* ship.getForceMult(),
+			//		touchpad.getKnobPercentY()* ship.getForceMult()));
 	}
 
 }
