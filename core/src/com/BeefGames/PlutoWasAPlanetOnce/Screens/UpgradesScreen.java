@@ -86,19 +86,13 @@ public class UpgradesScreen implements Screen {
 		{
 			stage = new Stage(); // bool scale to screen
 			stage.clear();
-			uiSkin = new Skin(Gdx.files.internal("data/uiskin.json"));
+			uiSkin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
 			skin = new Skin();
 			
 			atlas = new TextureAtlas("data/ui/button.pack"); //takes file as string
 			skin.addRegions(atlas);
 			
-			Boolean nightmare = false;
-			if(world.getGameMode() == 2 )
-			{
-				nightmare = true;
-			}
-			background = new BackgroundHandler(20,new Vector2(width, height),game.getAssetManager().get("data/world/star.png", Texture.class),
-					nightmare, true);
+			background = new BackgroundHandler(20,new Vector2(width, height),game.getAssetManager().get("data/world/star.png", Texture.class), true);
 			
 			stage.addActor(background);
 			
@@ -111,14 +105,7 @@ public class UpgradesScreen implements Screen {
 			label.setWidth(width);
 			label.setAlignment(Align.center);
 			//stage.addActor(label);
-			
-			
-			nightmareMode = new Label("Maximum of one upgrade per wave !",uiSkin);
-			if(world.getGameMode() == 2){
-				nightmareMode.setPosition(width/2 - nightmareMode.getWidth() ,2*nightmareMode.getHeight() );
-				stage.addActor(nightmareMode);
-			}
-			
+
 			upgradeLogo.setPosition(width/2-upgradeLogo.getWidth()/2, height - height/8  - upgradeLogo.getHeight()/4);
 
 			stage.addActor(upgradeLogo);

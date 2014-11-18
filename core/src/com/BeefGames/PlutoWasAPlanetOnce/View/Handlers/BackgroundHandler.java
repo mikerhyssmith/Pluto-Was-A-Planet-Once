@@ -23,15 +23,13 @@ public class BackgroundHandler extends Actor
 	
 	private Iterator<Star> starIter;
 	private Star s;
-	private Boolean nightmareMode;
 	private Boolean onStage;
 	
-	public BackgroundHandler(int starNumber, Vector2 worldSize, Texture star, Boolean nightmare, Boolean onStage)
+	public BackgroundHandler(int starNumber, Vector2 worldSize, Texture star, Boolean onStage)
 	{
 		this.starNumber = starNumber;
 		this.worldSize = worldSize;
 		this.star = star;
-		this.nightmareMode = nightmare;
 		this.onStage = onStage;
 		this.star.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		random = new Random();
@@ -86,21 +84,18 @@ public class BackgroundHandler extends Actor
 
 			int col = random.nextInt(5);
 			
-			if(!nightmareMode)
-			{
-				switch(col){
-					case 0: newColour = Color.WHITE;
-						break;
-					case 1: newColour = Color.RED;
-						break;
-					case 2: newColour = Color.ORANGE;
-						break;
-					case 3: newColour = Color.YELLOW;
-						break;
-					case 4: newColour = Color.CYAN;
-						break;
-				}
-			}
+			switch(col){
+			case 0: newColour = Color.WHITE;
+				break;
+			case 1: newColour = Color.RED;
+				break;
+			case 2: newColour = Color.ORANGE;
+				break;
+			case 3: newColour = Color.YELLOW;
+				break;
+			case 4: newColour = Color.CYAN;
+				break;
+		}
 			
 			stars.add(new Star(newPosition, newColour, newScale));
 		}

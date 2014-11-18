@@ -80,7 +80,7 @@ public class World
 	private Boolean turretActive = false;
 	private boolean upgradesComplete;
 	
-	private final Vector2 WORLDSIZE = new Vector2(Gdx.graphics.getWidth()*4, Gdx.graphics.getWidth()*4); 
+	private final Vector2 WORLDSIZE = new Vector2(Gdx.graphics.getWidth()*1.5f, Gdx.graphics.getWidth()*1.5f); 
 
 	private Iterator<Bullet> bulletIter;
 	private Array<Token> tokenArray;
@@ -91,7 +91,6 @@ public class World
 	
 	private Sniper snipe;
 	private Array<Bullet> enemyBullets;
-	private int gameMode;
 	private TimeHandler timeHandler = new TimeHandler();
 	private int moneySpent;
 	private long turretFireTime;
@@ -100,27 +99,18 @@ public class World
 	private int turretKill,eliteKills,upgrades;
 	
 	
-	public World(PlutoWasAPlanetOnce game, GameScreen gs,int gameMode) 
+	public World(PlutoWasAPlanetOnce game, GameScreen gs) 
 	{
 		this.game = game;
 		this.gameScreen = gs;
-		this.gameMode = gameMode;
-		difficulty = 1;
-		level = 0;
+		level = 1;
 		elapsedTime = 0;	
 		
 		// Set up handlers
 		audioHandler = game.getAudioHandler();
-	
-		//Used by the renderer to colour stars red if the mode is nightmare
-		Boolean nightmare;
-		if(gameMode == 2)
-			nightmare = true;
-		else
-			nightmare = false;
-		
-		worldRenderer = new WorldRenderer(game.getAssetManager(), debug, WORLDSIZE, nightmare);
-		wavemanager = new WaveManager(difficulty,WORLDSIZE.x,WORLDSIZE.y,this,gameMode, worldRenderer);
+			
+		worldRenderer = new WorldRenderer(game.getAssetManager(), debug, WORLDSIZE);
+		wavemanager = new WaveManager(WORLDSIZE.x,WORLDSIZE.y,this, worldRenderer);
 		
 		// Temporary values for player
 		float playerStartHealth = 100f;
@@ -194,14 +184,9 @@ public class World
 		
 		audioHandler.startMusic();
 		
-		if(gameMode == 2){
+
+		upgradeManager = new UpgradeManager(this,game,false);
 		
-		upgradeManager = new UpgradeManager(this,game,true);
-		
-		}
-		else{
-			upgradeManager = new UpgradeManager(this,game,false);
-		}
 	}
 
 	public void update() 
@@ -577,10 +562,6 @@ public class World
 	}
 	public void addEnemyBullet(Bullet b){
 		enemyBullets.add(b);
-	}
-	public int getGameMode(){
-		
-		return gameMode;
 	}
 	public boolean getTurretActive(){
 		

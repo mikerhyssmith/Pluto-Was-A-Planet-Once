@@ -57,13 +57,8 @@ public class CollisionHandler
 		this.ship = ship;
 		
 		this.worldSize = world.getWorldSize();
-		//planet.setInitialPixels(pixHandler.countPixels());
-		//planet.setCurrentPixels(planet.getInitialPixels());
 		
-		//planet.setMaxHealth(((float)planet.getCurrentPixels()/(float)planet.getInitialPixels())*100f);
-		//planet.setHealth(planet.getMaxHealth());
 		planetChange = false;
-		//game.getAssetManager().get("data/planetv1.png", Pixmap.class)
 	}
 	
 	public void checkEnemyCollisions(Array<Enemy> es,Array<Bullet> bs){

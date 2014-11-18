@@ -50,7 +50,7 @@ public class WorldRenderer {
 	private Rectangle r;
 	private float[] points;
 	
-	public WorldRenderer(AssetManager manager, Boolean debug, Vector2 worldSize, Boolean nightmare)
+	public WorldRenderer(AssetManager manager, Boolean debug, Vector2 worldSize)
 	{
 		this.debug = debug;
 		
@@ -73,7 +73,7 @@ public class WorldRenderer {
 		
 		setUpTextures();
 		
-		background = new BackgroundHandler(300, worldSize, textures.get("star"), nightmare, false);
+		background = new BackgroundHandler(300, worldSize, textures.get("star"), false);
 		
 		if(debug)
 		{

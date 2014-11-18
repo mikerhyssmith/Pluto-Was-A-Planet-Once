@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -112,9 +113,16 @@ public class MainMenu implements Screen {
 				}
 				public void touchUp(InputEvent event, float x,float y , int pointer, int button)
 				{
-					System.out.println("Up");
 					game.getAudioHandler().buttonClick();
-					game.setScreen(new GameModeSelect(game));
+            		System.out.println("Up");
+            		stage.addAction(Actions.sequence(Actions.fadeOut(1),Actions.run(new Runnable()
+            		{     
+            			@Override        
+            			public void run() 
+            			{        
+            				game.setScreen(new GameScreen(game));                    
+            			}                             
+            		}))); 
 				}
 			});
 			

@@ -15,8 +15,6 @@ public class GameScreen implements Screen {
 	private PlutoWasAPlanetOnce game;
 	World world;
 	GameHUD hud;
-	private int gameMode;
-	private TweenManager manager ;
 	private long actionBeginTime;
 	
 	private boolean gameLost,gameLostTimer;
@@ -46,13 +44,12 @@ public class GameScreen implements Screen {
 	}
 	
 	//Constructor
-	public GameScreen(PlutoWasAPlanetOnce game,int gameMode ){
+	public GameScreen(PlutoWasAPlanetOnce game ){
 		
 		this.game = game;
-		world = new World(game,this,gameMode);
+		world = new World(game,this);
 		hud = new GameHUD(world,game,this);
 		this.gameLost = false;
-		this.gameMode = gameMode;
 		System.out.println(world.getShip().getHealth());
 	}
 

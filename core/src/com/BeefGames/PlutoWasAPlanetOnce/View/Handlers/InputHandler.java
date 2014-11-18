@@ -14,7 +14,7 @@ public class InputHandler implements InputProcessor{
 
 	private Array<Nuke> nukeArray;
 	private BulletHandler bulletHandler;
-	private boolean keydown = false;
+	private boolean keydown,spacedown =false ;
 
 	
 	public InputHandler(World world){
@@ -56,7 +56,8 @@ public class InputHandler implements InputProcessor{
 			}*/
 			break;
 		case Keys.SPACE:
-			bulletHandler.Fire(ship.getRotation());
+			spacedown = true;
+			System.out.println(spacedown);
 			break;
 		default:
 			break;
@@ -89,6 +90,9 @@ public class InputHandler implements InputProcessor{
 				ship.getForce().x = 0;
 			keydown = false;
 			break;
+		case Keys.SPACE:
+			spacedown = false;
+			System.out.println(spacedown);
 		default:
 			break;
 		}
@@ -103,11 +107,6 @@ public class InputHandler implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// pointer - what finger
-		
-		//This fire method has been rewritten - need a different one for desktop shooting
-		//bulletHandler.Fire(screenX, screenY);
-		
 		return true;
 	}
 	
@@ -161,9 +160,11 @@ public class InputHandler implements InputProcessor{
 		{
 			ship.setMove(false);
 		}
-		
-		//ship.setForce(new Vector2(touchpad.getKnobPercentX()* ship.getForceMult(),
-			//		touchpad.getKnobPercentY()* ship.getForceMult()));
+
+	}
+	public boolean fire(){
+		System.out.println(spacedown);
+		return spacedown;
 	}
 
 }

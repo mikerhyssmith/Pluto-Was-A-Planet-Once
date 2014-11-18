@@ -78,7 +78,7 @@ public class OptionsScreen implements Screen {
 			
 			ls = new LabelStyle(white, Color.WHITE);
 			
-            background = new BackgroundHandler(30, new Vector2(width,height), game.getAssetManager().get("data/world/star.png",Texture.class), false, true);
+            background = new BackgroundHandler(30, new Vector2(width,height), game.getAssetManager().get("data/world/star.png",Texture.class), true);
             stage.addActor(background);
 		}
 		Gdx.input.setInputProcessor(stage);

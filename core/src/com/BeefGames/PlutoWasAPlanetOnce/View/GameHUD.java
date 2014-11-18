@@ -187,7 +187,7 @@ public class GameHUD {
 		hudStage.addActor(timeLabel);
 		 
 	
-	    inputHandler = new InputHandler(world);
+	    inputHandler = world.getInputHandler();
 
 	    SetInput(world.getInputHandler());
 	    
@@ -280,25 +280,15 @@ public class GameHUD {
 			pause.setVisible(false);
 		}
 		
+		
 		timeLabel.setVisible(false);
 		
-		if(gameWorld.getGameMode() == 1){
-		time.setVisible(true);
-		time.setText("Elapsed Time: " + timeHandler.getFormattedTime(timeHandler.getTime()));
-		}
 		//Print losing text when the game ends
 	    lost = gameWorld.getStatus();
 	    if(lost && gameLost.isVisible() == false ){
-
-	    	//game.getScreen().dispose();
-	    	if(gameWorld.getGameMode() ==1){
-		    	game.setScreen(new EndGameScreen(game.getScreen(),game,gameWorld.getTotalKills(),gameWorld.getLevel(),gameWorld.getMoneySpent(),timeHandler.getFormattedTime(timeHandler.getTime()),gameWorld.getLevel()));
-
-	    		
-	    	}else{
 	    	game.setScreen(new EndGameScreen(game.getScreen(),game,gameWorld.getTotalKills(),gameWorld.getLevel(),gameWorld.getMoneySpent(),timeHandler.getFormattedTime(timeHandler.getTime()),calculateScore()));
-	    	}
-	    	}
+	    	
+	    }
 	    	
 	    
 	    //Get the ships health and armour
@@ -354,7 +344,6 @@ public class GameHUD {
 				ship.setMomentum(new Vector2(0,0) );
 	    		ship.setVelocity(new Vector2(0, 0));
 
-	    		hudStage.cancelTouchFocus();
 	    		
 	    		gameWorld.removeAllBullets();
 	    		
@@ -383,6 +372,8 @@ public class GameHUD {
 		
 	   //Check for shooting
 	    inputHandler.move();
+	    shoot = inputHandler.fire();
+	    //System.out.println(shoot);
 	    if(currentCooldown >= shipCooldown)
 	    {
 	    	currentCooldown = shipCooldown;
@@ -405,10 +396,9 @@ public class GameHUD {
 	    		currentCooldown = temp;
 	    	}
 	    }
-	    
+
 		//Update stage
 		hudStage.act(delta);
-		//System.out.println("health length: " + hbarPart.getRegionWidth() + " armour length: " +abarPart.getRegionWidth() );
 	}
 
 	public void render(float delta)
@@ -424,6 +414,7 @@ public class GameHUD {
 		//Draw the HUD
 		worldRenderer.getSpriteBatch().begin();
 	    minimap.update(gameWorld.getEnemies(), gameWorld.getShip(), gameWorld.getTokens());
+	    minimap.draw(worldRenderer.getSpriteBatch(), 1.0f);
 	    
 		hudStage.draw();
 		worldRenderer.getSpriteBatch().end();

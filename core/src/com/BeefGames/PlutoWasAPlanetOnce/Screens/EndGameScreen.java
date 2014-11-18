@@ -83,7 +83,7 @@ public class EndGameScreen implements Screen{
 			buttons = new Table();
 			statsContainer = new Table();
 			
-            background = new BackgroundHandler(30, new Vector2(width,height), game.getAssetManager().get("data/world/star.png",Texture.class), false, true);
+            background = new BackgroundHandler(30, new Vector2(width,height), game.getAssetManager().get("data/world/star.png",Texture.class),false);
             stage.addActor(background);
 			
 			label = new Label("Game Over !", ls);

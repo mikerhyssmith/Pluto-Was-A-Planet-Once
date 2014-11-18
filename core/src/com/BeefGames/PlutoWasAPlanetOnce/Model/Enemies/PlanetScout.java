@@ -40,7 +40,7 @@ public class PlanetScout extends Enemy
 		
 		//calcVelocity = velocity.tmp().mul(Gdx.graphics.getDeltaTime());
 		
-		position.add(velocity.scl(Gdx.graphics.getDeltaTime()));
+		position.add(velocity.cpy().scl(Gdx.graphics.getDeltaTime()));
 		//position.add(new Vector2(1,1));
 		super.advance(delta, ship);
 	}

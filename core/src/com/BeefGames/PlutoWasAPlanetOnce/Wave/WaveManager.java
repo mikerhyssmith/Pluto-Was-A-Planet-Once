@@ -33,8 +33,7 @@ public class WaveManager
 	private int enemyNumbers;
 	private int enemiesSpawned;
 	private World world;
-	private int waveLimit,waveNumber;
-	private int gameMode;
+	private int waveNumber;
 	private int eliteLevel;
 	private boolean eliteSpawned;
 	private ParticleHandler particleHandler;
@@ -42,12 +41,10 @@ public class WaveManager
 	private WorldRenderer renderer;
 	
 	//Constructor
-	public WaveManager(int Difficulty,float Width,float Height,World world,int gameMode, WorldRenderer renderer)
+	public WaveManager(float Width,float Height,World world, WorldRenderer renderer)
 	{
-		this.gameMode = gameMode;
 		spawnManager = new SpawnManager(Width,Height);
 		lastSpawnTime =0;
-		waveLimit =9;
 		tempEnemies = new Array<Enemy>();
 		this.world = world;
 		eliteLevel = 4;
@@ -62,44 +59,7 @@ public class WaveManager
 		eliteSpawned = false;
 		System.out.println(waveNumber);
 		System.out.println(eliteLevel);
-		if(gameMode ==1)
-		{
-			if(waveNumber <= waveLimit)
-			{
-				if(waveNumber == eliteLevel)
-				{
-					createEliteWave(renderer, 300 + (level*10),5 + (5*level), 50 + level);
-					waveNumber ++;
-					eliteLevel +=5;
-				}
-				else
-				{
-					setEnemies(2+level*difficulty, (float)Math.sqrt(level*4)*difficulty, 10, (float)Math.sqrt(level*3)*1.5f, planetPosition, debug);
-					waveNumber++;
-				}	
-			}
-			else
-			{
-				world.getGameScreen().setStatus(true,false);
-			}
-		}
-		else if(gameMode ==2)
-		{
-			if(waveNumber == eliteLevel)
-			{
-				createEliteWave(renderer, 1000 + (level*20),10 + (10*level), 50 + level);
-				waveNumber ++;
-				eliteLevel +=5;
-			}
-			else
-			{
-				setEnemies(2+2*level*difficulty, 2 + level*difficulty, 10, 5 + level, planetPosition, debug);
-				waveNumber++;
-			}	
-		}
-		else
-		{
-			if(waveNumber == eliteLevel)
+		if(waveNumber == eliteLevel)
 			{
 				createEliteWave(renderer, 400 + (level*9),2 + (4*level), 50 + level);
 				waveNumber ++;
@@ -107,11 +67,10 @@ public class WaveManager
 			}
 			else
 			{
-				setEnemies(2+level*difficulty, (float)Math.sqrt(level*4)*difficulty, 10, (float)Math.sqrt(level*3)*1.5f, planetPosition, debug);
+				setEnemies(level*level, (float)Math.sqrt(level*4)*difficulty, 10, (float)Math.sqrt(level*3)*1.5f, planetPosition, debug);
 				waveNumber++;
 			}	
 
-		}
 	}
 	
 	//Method for creating enemies
@@ -121,6 +80,7 @@ public class WaveManager
 		//For now all enemy types have the same health and value		
 		enemyNumbers = enemyNumber;
 		for (int i =0; i < enemyNumber; i++){
+			
 			Texture follower = renderer.getTexture("Follower");
 			Follower f = new Follower(spawnManager.getPosition(),follower.getWidth(),follower.getHeight(), 0, 
 					spawnManager.getSpeed(),enemyhealth, enemyvalue, enemydamage,follower.getWidth(),follower.getHeight());
@@ -146,12 +106,15 @@ public class WaveManager
 					spawnManager.getSpeed(),enemyhealth, enemyvalue, enemydamage,world,sniper.getWidth(),sniper.getHeight());
 			tempEnemies.add(sn);
 			
+			
 			if(debug)
 			{
+				/**
 				renderer.addRect(f.getBounds());
 				renderer.addRect(p.getBounds());
 				renderer.addRect(s.getBounds());
 				renderer.addRect(sn.getBounds());
+				*/
 			}
 		}
 	}
@@ -186,67 +149,6 @@ public class WaveManager
 		eliteSpawned = true;
 	}
 	
-	public void setNightmareEnemies(int enemyNumber, float enemyhealth, int enemyvalue, float enemydamage, 
-			Vector2 planetLocation, Boolean debug)
-	{
-		//Decide probabilities for spawning
-		int mostCommon = spawnManager.randInt(4);
-		float probs[] = new float[4];
-		for(int i = 0; i <4; i++)
-		{
-			if(i ==mostCommon)
-			{
-				probs[i] = 0.4f; 
-			}
-			else probs[i] = 0.2f;
-		}
-		
-		//0: follower, 1: planetscout, 2; sniper, 3: soldier
-		for (int i =0; i < 4*enemyNumber; i++)
-		{
-			float choice = spawnManager.randFloat();
-			
-			if(choice < probs[0])
-			{
-				Texture follower = renderer.getTexture("follower");
-				Follower f = new Follower(spawnManager.getPosition(),follower.getWidth(),follower.getHeight(), 0, 
-							spawnManager.getSpeed(),enemyhealth, enemyvalue, enemydamage,follower.getWidth(),follower.getHeight());
-				tempEnemies.add(f);
-
-				
-			}
-			else if(choice < (probs[0] + probs[1]))
-			{
-				Texture planetScout =  renderer.getTexture("planetscout");
-				
-				PlanetScout p = new PlanetScout(new Vector2(spawnManager.getPosition()), planetScout.getWidth(), planetScout.getHeight(), 0,
-						spawnManager.getSpeed(),planetLocation,enemyhealth, enemyvalue, enemydamage,  planetScout.getWidth(), planetScout.getHeight());
-				tempEnemies.add(p);		
-
-				
-			}
-			else if(choice < (probs[0] + probs[1] + probs[2]))
-			{
-				Texture sniper = renderer.getTexture("Sniper");
-				
-				Sniper sn = new Sniper(spawnManager.getPosition(),sniper.getWidth(),sniper.getHeight(), 0, 
-						spawnManager.getSpeed(),enemyhealth, enemyvalue, enemydamage,world,sniper.getWidth(),sniper.getHeight());
-				tempEnemies.add(sn);
-
-			
-			}
-			else
-			{
-				Texture soldier = renderer.getTexture("soldier");
-				
-				Soldier s = new Soldier(spawnManager.getPosition(),soldier.getWidth(), soldier.getHeight(), 0,
-						spawnManager.getSpeed(),planetLocation,enemyhealth, enemyvalue, enemydamage,soldier.getWidth(), soldier.getHeight());
-				tempEnemies.add(s);
-
-			}
-		}	
-	}
-
 
 	/**
 	 * Check if there are any enemies left
