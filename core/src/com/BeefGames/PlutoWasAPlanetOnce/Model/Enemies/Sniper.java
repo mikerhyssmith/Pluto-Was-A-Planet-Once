@@ -20,7 +20,7 @@ public class Sniper extends Enemy{
 	
 	public Sniper(Vector2 position,float width, float height,  float rotation, 
 			float speed, float health, int value, float damage,World world, float texWidth, float texHeight) {
-		super(speed,rotation, width, height, position, health, value, damage, texWidth, texHeight);
+		super(speed,rotation, width, height, position, health, damage, texWidth, texHeight);
 		
 		shotRadius = new Circle(position.x,position.y,200);
 		bulletHandler = new BulletHandler(world);

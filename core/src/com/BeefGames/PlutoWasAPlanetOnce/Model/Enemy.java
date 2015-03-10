@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Enemy extends MoveableEntity {
 
-	private int value = 0;
 	private float damage = 0f;
 	private ParticleEmitter emitter;
 	private Boolean destroyed = false;
@@ -21,14 +20,13 @@ public abstract class Enemy extends MoveableEntity {
 	 * @param damage Damage dealt on impact
 	 */
 	public Enemy(float speed, float rotation, float width, float height,
-			Vector2 position, float health, int value, float damage, float texWidth, float texHeight) {
+			Vector2 position, float health, float damage, float texWidth, float texHeight) {
 		super(position,speed,  rotation, width, height, texWidth, texHeight);
 
 		//Start at full health
 		this.health = health;
 		this.maxHealth = health;
 		this.damage = damage;
-		this.value = value;
 		this.velocity = new Vector2(0,0);
 	}
 	
@@ -39,20 +37,6 @@ public abstract class Enemy extends MoveableEntity {
 	
 	public String getType(){
 		return "Enemy";
-	}
-	/**
-	 * Returns the cash value of the enemy
-	 * @return
-	 */
-	public int getValue(){
-		return this.value;
-	}
-	/**
-	 * Sets the cash value of the enemy
-	 * @param value The new value
-	 */
-	public void setValue(int value){
-		this.value = value;
 	}
 	
 	/**

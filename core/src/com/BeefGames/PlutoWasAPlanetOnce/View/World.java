@@ -1,5 +1,6 @@
 package com.BeefGames.PlutoWasAPlanetOnce.View;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.BeefGames.PlutoWasAPlanetOnce.PlutoWasAPlanetOnce;
@@ -7,15 +8,10 @@ import com.BeefGames.PlutoWasAPlanetOnce.Model.Bullet;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemy;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Planet;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Ship;
-import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemies.Elite;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemies.Sniper;
 import com.BeefGames.PlutoWasAPlanetOnce.Screens.GameScreen;
-import com.BeefGames.PlutoWasAPlanetOnce.Screens.UpgradesScreen;
 import com.BeefGames.PlutoWasAPlanetOnce.Tokens.Token;
 import com.BeefGames.PlutoWasAPlanetOnce.Tokens.TokenManager;
-import com.BeefGames.PlutoWasAPlanetOnce.Upgrades.ProtectionBubble;
-import com.BeefGames.PlutoWasAPlanetOnce.Upgrades.Turret;
-import com.BeefGames.PlutoWasAPlanetOnce.Upgrades.UpgradeManager;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.AudioHandler;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.CollisionHandler;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.InputHandler;
@@ -43,9 +39,6 @@ public class World
 	private Planet planet;
 	private Array<Enemy> es;
 	private Array<Bullet> bs;
-	private Array<Bullet> turretBullets;
-	private Turret turret;
-	private ProtectionBubble protectionBubble;
 	
 	// Iterators
 	private Iterator<Bullet> bIter;
@@ -71,14 +64,9 @@ public class World
 	private int gameStatus;
 	
 	private GameScreen gameScreen;
-	private UpgradesScreen upgradesScreen;
 
 	Texture circleTexture, explosionCircle;
 	Sprite circle, explosionCircleSprite;
-	
-	private Boolean protection = false;
-	private Boolean turretActive = false;
-	private boolean upgradesComplete;
 	
 	private final Vector2 WORLDSIZE = new Vector2(Gdx.graphics.getWidth()*1.5f, Gdx.graphics.getWidth()*1.5f); 
 
@@ -92,11 +80,7 @@ public class World
 	private Sniper snipe;
 	private Array<Bullet> enemyBullets;
 	private TimeHandler timeHandler = new TimeHandler();
-	private int moneySpent;
-	private long turretFireTime;
-	private long turretStartTime;
-	private UpgradeManager upgradeManager;
-	private int turretKill,eliteKills,upgrades;
+	private int upgrades;
 	
 	
 	public World(PlutoWasAPlanetOnce game, GameScreen gs) 
@@ -118,7 +102,6 @@ public class World
 		float playerMaxArmour = 20f;
 		float cooldown = 0.4f;
 		float playerDamage = 5f;
-		turretStartTime = TimeUtils.nanoTime();
 		
 		Texture s = worldRenderer.getTexture("ship");
 		
@@ -163,7 +146,6 @@ public class World
 		
 		wavemanager.createWave(planet.getPosition(), level, difficulty, debug);
 		
-		upgradesScreen = new UpgradesScreen(game,gameScreen,this);
 		tokenManager = new TokenManager(worldRenderer,this);
 		
 		if(debug)
@@ -173,30 +155,19 @@ public class World
 			worldRenderer.addRect(new Rectangle(0,0,2,2));
 		}
 
-		turretBullets = new Array<Bullet>();
 		enemyBullets = new Array<Bullet>();
 		
 		collisionHandler = new CollisionHandler(game.getAssetManager().get("data/world/planetfinal.png", Pixmap.class),
-				es, planet, worldRenderer,this,tokenManager,particleHandler,ship);
+				es, planet, worldRenderer,this,tokenManager,particleHandler);
 		
-		moneyBefore = ship.getMoney();
 		timeDelay = false;
 		
 		audioHandler.startMusic();
 		
-
-		upgradeManager = new UpgradeManager(this,game,false);
-		
 	}
-
+	
 	public void update() 
 	{
-		
-		/*
-		 * if(accelhandler.checkAccellerometer()) {
-		 * accelhandler.moveShip(Gdx.graphics.getDeltaTime()); }
-		 */
-		//System.out.println(worldRenderer.getTexture("planet").getWidth());
 		ship.update(WORLDSIZE);
 		
 		wavemanager.update(ship, planet.getPosition());
@@ -222,15 +193,9 @@ public class World
 					snipe.setMoving(true);
 				}
 			}
-			else if(e.getType() == "Elite")
-			{
-				Elite boss = (Elite) e;
-				
-				if(boss.getShotCircle().contains(ship.getPosition()))
-				{
-					boss.Fire(ship.getPosition().x+ship.getWidth()/2 , ship.getPosition().y+ship.getHeight()/2);
-				}
-			}
+			
+			worldRenderer.updateDrawn("enemy" + e.hashCode(), e.getPosition(),new Vector2(e.getWidth() / 2, e.getHeight() / 2),
+					new Vector2(e.getWidth(), e.getHeight()),new Vector2(1, 1), e.getRotation());
 		}
 		
 		bIter = enemyBullets.iterator();
@@ -243,91 +208,14 @@ public class World
 			
 		}
 		
-		if(turret != null)
-		{
-			turretBullets = turret.getBullets();
-		}
-		
 		//Handle Collisions
 		collisionHandler.checkEnemyCollisions(es, bs);
 		collisionHandler.checkPlanetCollisions(es, planet);
 		collisionHandler.checkShipCollision(ship, es);
 		collisionHandler.checkSniperCollision(ship,enemyBullets);
-
-		if(turretActive)
-		{
-			if(turret.getHasTarget())
-			{
-				if(!turret.getTarget().getDestroyed())
-				{		//If the turret has a target that isnt destroyed, try to shoot it
-					e = turret.getTarget();
-					turretFireTime = TimeUtils.nanoTime();
-					turret.rotate();
-					
-					if(((turretFireTime - turretStartTime) / 1000000000) > 0.2)
-					{
-						turret.Fire(e.getPosition().x + e.getWidth()/2, e.getPosition().y + e.getHeight()/2);
-						turretStartTime = TimeUtils.nanoTime();
-					}
-				}
-				else
-				{
-					turret.setHasTarget(false);
-				}
-			}
-			else
-			{		//If the turret has no target, search for one
-				eIter = es.iterator();	
-				while(eIter.hasNext())
-				{
-					e = eIter.next();
-					if(turret.getCircleBounds().contains(new Vector2(e.getPosition().x + e.getWidth()/2,
-							e.getPosition().y + e.getHeight()/2)))
-					{
-						turret.setTarget(e);
-						turret.setHasTarget(true);
-						break;
-					}
-				}
-			}
-			collisionHandler.checkTurretCollisions(turret,es,turretBullets);
-		}
 		
 		if (!wavemanager.checkAlive()) {
 
-			if (!upgradesComplete) {
-				
-				bs = ship.getBullets();
-				bulletIter = bs.iterator();
-				// clean up bullet array
-				while(bulletIter.hasNext()){
-					b = bulletIter.next();
-					worldRenderer.removeDrawn("bullet" + b.hashCode());
-					bulletIter.remove();
-				}
-				
-				tokenArray = tokenManager.getTokens();
-				tokenIter = tokenArray.iterator();
-				// clean up token array
-				while(tokenIter.hasNext()){
-					token = tokenIter.next();
-					if(token.getPosition().x >= WORLDSIZE.x/2 || token.getPosition().y >= WORLDSIZE.y/2){
-						
-						worldRenderer.removeDrawn("token" + token.hashCode());
-						tokenIter.remove();
-					}
-					else if(token.getPosition().x <=- WORLDSIZE.x/2 || token.getPosition().y <= - WORLDSIZE.y/2){
-						
-						worldRenderer.removeDrawn("token"+ token.hashCode());
-						tokenIter.remove();
-					}
-				}
-				
-				gameStatus = 1;
-				upgradesComplete = true;
-				particleHandler.stopAll();
-				
-			}
 			long currentTime = TimeUtils.nanoTime();
 			elapsedTime = ((actionBeginTime - currentTime) / 1000000000);
 			
@@ -338,8 +226,6 @@ public class World
 				kills =0;
 				level++;
 				wavemanager.createWave(planet.getPosition(), level, difficulty, debug);
-				upgradesComplete = false;
-				moneyBefore = ship.getMoney();
 				timeDelay = false;
 			}
 		}
@@ -354,50 +240,6 @@ public class World
 					new Vector2(b.getWidth(), b.getHeight()),new Vector2(1, 1), b.getRotation());
 		}
 
-		// Update drawing info for enemies
-		eIter = es.iterator();
-		while (eIter.hasNext()) 
-		{
-			e = eIter.next();
-
-			worldRenderer.updateDrawn("enemy" + e.hashCode(), e.getPosition(),new Vector2(e.getWidth() / 2, e.getHeight() / 2),
-					new Vector2(e.getWidth(), e.getHeight()),new Vector2(1, 1), e.getRotation());
-			//Update elite turret
-			if(e.getType() =="Elite")
-			{
-				Elite el = (Elite)e;
-				
-				worldRenderer.updateDrawn("enemyturret" + e.hashCode(), el.getTurretPosition(),el.getTurretOrigin(),
-						el.getTurretSize(),new Vector2(1, 1), el.getTurretRotation());
-			}
-		}
-		if(turretActive)
-		{
-			if(turret.getAmmo() > 0){
-			worldRenderer.updateDrawn("turret"+turret.hashCode(), 
-					turret.getPosition(),
-					new Vector2(turret.getWidth()/2,turret.getHeight()/2), 
-					new Vector2(turret.getWidth(),turret.getHeight()), 
-					new Vector2(1,1),
-					turret.getRotation());
-			}else{
-				
-				particleHandler.addTurretRemoval(turret.getPosition().x + turret.getWidth()/2, turret.getPosition().y + turret.getHeight()/2);
-				worldRenderer.removeDrawn("turret"+turret.hashCode());
-				worldRenderer.removeDrawn("turretBase");
-				turretActive = false;
-				
-			}
-		}
-		
-		bIter = turretBullets.iterator();
-		while(bIter.hasNext())
-		{
-			b = bIter.next();
-			b.update();
-			worldRenderer.updateDrawn("bullet" + b.hashCode(), b.getPosition(),new Vector2(b.getWidth() / 2, b.getHeight() / 2),
-					new Vector2(b.getWidth(), b.getHeight()),new Vector2(1, 1), b.getRotation());
-		}
 
 		// Update drawing info for planet and ship
 		worldRenderer.updateDrawn("ship", ship.getPosition(),
@@ -446,50 +288,6 @@ public class World
 	}
 	public int getLevel(){
 		return level;
-	}
-	public UpgradesScreen getUpgradesScreen(){
-		return upgradesScreen;
-	}
-	public void setProtectionBubble(ProtectionBubble pb){
-		protectionBubble = pb;
-		worldRenderer.addDrawn("protectionBubble", "protectionBubble", protectionBubble.getPosition(), protectionBubble.getPosition(), new Vector2(worldRenderer.getTexture("protectionBubble").getWidth(),worldRenderer.getTexture("protectionBubble").getHeight()), new Vector2(1,1), 0, new Vector2(0,0), new Vector2(worldRenderer.getTexture("protectionBubble").getWidth(),worldRenderer.getTexture("protectionBubble").getHeight()), false, false, true);
-		protection = true;
-	}
-	public boolean getProtectionBubble(){
-		
-		return protection;
-	}
-	public void setProtection(boolean protect){
-		protection = protect;
-	}
-	public ProtectionBubble getBubble(){
-		
-		return protectionBubble;
-	}
-	public void setTurret(Turret turret){
-		
-		if(!turretActive)
-		{
-			this.turret = turret;
-			worldRenderer.addDrawn("turretBase","turretBase",new Vector2(turret.getPosition().x+worldRenderer.getTexture("turret").getWidth()/2 - worldRenderer.getTexture("turretBase").getWidth()/2,turret.getPosition().y+worldRenderer.getTexture("turret").getHeight()/2 - worldRenderer.getTexture("turretBase").getHeight()/2),new Vector2(planet.getWidth()/2,planet.getHeight()/2),new Vector2(worldRenderer.getTexture("turretBase").getWidth(),worldRenderer.getTexture("turretBase").getHeight()),new Vector2(1,1),0,new Vector2(0,0),new Vector2(worldRenderer.getTexture("turretBase").getWidth(),worldRenderer.getTexture("turretBase").getHeight()), false, false, true);
-
-			worldRenderer.addDrawn("turret" + turret.hashCode(), "turret", turret.getPosition(), new Vector2(planet.getWidth()/2,planet.getHeight()/2), new Vector2(worldRenderer.getTexture("turret").getWidth(),worldRenderer.getTexture("turret").getHeight()), new Vector2(1,1), 0, new Vector2(0,0), new Vector2(worldRenderer.getTexture("turret").getWidth(),worldRenderer.getTexture("turret").getHeight()), false, false, true);
-			turretActive = true;
-			
-			//Make sure protection bubble is on top always
-			if(protection)
-			{
-				worldRenderer.swapDrawns("turret"+turret.hashCode(), "protectionBubble");
-				worldRenderer.swapDrawns("turretBase", "ship");
-				worldRenderer.swapDrawns("turret"+turret.hashCode(), "exhaust");
-				worldRenderer.swapDrawns("turretBase", "turret"+turret.hashCode());
-			}
-			else
-			{
-				worldRenderer.swapDrawns("turret"+turret.hashCode(), "ship");
-				worldRenderer.swapDrawns("turretBase", "exhaust");
-			}
-		}
 	}
 	public Boolean getDebug(){
 		return debug;
@@ -563,37 +361,13 @@ public class World
 	public void addEnemyBullet(Bullet b){
 		enemyBullets.add(b);
 	}
-	public boolean getTurretActive(){
-		
-		return turretActive;
-	}
-	public Turret getTurret(){
-		
-		return turret;
-	}
-	public void setMoneySpent(int money){
-		moneySpent = money;
-	}
-	public int getMoneySpent(){
-		return moneySpent;
-	}
 	
 	public int getTotalKills(){
 		return totalKills;
 	}
-	public UpgradeManager getUpgradeManager(){
-		return upgradeManager;
-	}
+
 	public void removeAllBullets(){
 		bulletIter = enemyBullets.iterator();
-		while(bulletIter.hasNext())
-		{
-			
-			b = bulletIter.next();
-			worldRenderer.removeDrawn("bullet"+ b.hashCode());
-			bulletIter.remove();
-		}
-		bulletIter = turretBullets.iterator();
 		while(bulletIter.hasNext())
 		{
 			
@@ -612,23 +386,6 @@ public class World
 		
 	}
 	
-	public void addTurretKill(){
-		
-		turretKill ++;
-	}
-	public int getTurretKills(){
-		
-		return turretKill;
-	}
-	public int getEliteKills(){
-		return  eliteKills;
-		
-	}
-	public void addEliteKill(){
-		
-		eliteKills++;
-	}
-	
 	public void addUpgrade(){
 		
 		upgrades++;
@@ -637,6 +394,5 @@ public class World
 		
 		return upgrades;
 	}
-	
 	
 }

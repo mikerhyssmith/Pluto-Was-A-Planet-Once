@@ -34,7 +34,7 @@ public class GameScreen implements Screen {
 	public void setStatus(boolean status,boolean planet)
 	{
 		if(!planet){
-		this.gameLost = status;
+			this.gameLost = status;
 		}
 		else{
 			
@@ -90,7 +90,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() 
 	{
-		hud.updateNukes();
+		
 	}
 	
 

@@ -16,7 +16,7 @@ public class PlanetScout extends Enemy
 	public PlanetScout(Vector2 position,float width, float height,  float rotation,float speed 
 			,Vector2 target, float health, int value, float damage, float texWidth, float texHeight) 
 	{
-		super(speed, rotation, width, height, position, health, value, damage, texWidth, texHeight);
+		super(speed, rotation, width, height, position, health, damage, texWidth, texHeight);
 		
 		tempx = (target.x - position.x -width/2);
 		tempy = (target.y - position.y -height/2);

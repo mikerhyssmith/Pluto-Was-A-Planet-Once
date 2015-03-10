@@ -1,7 +1,6 @@
 package com.BeefGames.PlutoWasAPlanetOnce.View.Handlers;
 
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Ship;
-import com.BeefGames.PlutoWasAPlanetOnce.Upgrades.Nuke;
 import com.BeefGames.PlutoWasAPlanetOnce.View.World;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -12,7 +11,6 @@ public class InputHandler implements InputProcessor{
 	private World world;
 	private Ship ship;
 
-	private Array<Nuke> nukeArray;
 	private BulletHandler bulletHandler;
 	private boolean keydown,spacedown =false ;
 
@@ -20,7 +18,6 @@ public class InputHandler implements InputProcessor{
 	public InputHandler(World world){
 		this.world = world;
 		ship = world.getShip();
-		nukeArray = new Array<Nuke>();
 		bulletHandler = new BulletHandler(world);
 	}
 	
@@ -135,17 +132,7 @@ public class InputHandler implements InputProcessor{
 		// TODO Auto-generated method stub
 		return true;
 	}
-	public Array<Nuke> getNukes(){
-		
-		return nukeArray;
-	}
-	public void setNuke(Nuke n)
-	{
-		if(nukeArray.size <= 3)
-		{
-			nukeArray.add(n);
-		}
-	}
+
 	public BulletHandler getBulletHandler()
 	{
 		return bulletHandler;
@@ -163,7 +150,6 @@ public class InputHandler implements InputProcessor{
 
 	}
 	public boolean fire(){
-		System.out.println(spacedown);
 		return spacedown;
 	}
 

@@ -199,18 +199,13 @@ public class SplashScreen implements Screen
 		manager.load("data/Bullet.png", Texture.class);
 		manager.load("data/tokens/healthtoken.png", Texture.class);
 		manager.load("data/tokens/armourtoken.png", Texture.class);
-		manager.load("data/tokens/moneyToken.png", Texture.class);
+
 		manager.load("data/CIRCLE.png", Texture.class);
 		manager.load("data/world/planetfinal.png", Pixmap.class);
-		manager.load("data/protectionBubble.png",Texture.class);
-		manager.load("data/world/turret.png",Texture.class);
-		manager.load("data/enemies/Elite.png",Texture.class);
-		manager.load("data/world/turretbase.png",Texture.class);
-		manager.load("data/upgrades/upgradetitle.png",Texture.class);
+
 		manager.load("data/world/enemybullet.png",Texture.class);
 		manager.load("data/world/enemybullet2.png",Texture.class);
-		
-		manager.load("data/enemies/eliteturret.png",Texture.class);
+
 		
 		//HUD
 		manager.load("data/hud/HUDPack.pack", TextureAtlas.class);
@@ -226,23 +221,6 @@ public class SplashScreen implements Screen
 		manager.load("data/planetHit.mp3",Sound.class);
 		manager.load("data/menuSelectionClick.mp3",Sound.class);
 		
-		//Upgrade textures -  need packing
-		manager.load("data/upgrades/armourIcon.png", Texture.class);
-		manager.load("data/upgrades/healthIcon.png", Texture.class);
-		manager.load("data/upgrades/nukeIcon.png", Texture.class);
-		manager.load("data/upgrades/shieldIcon.png", Texture.class);
-		manager.load("data/upgrades/turretIcon.png", Texture.class);
-		manager.load("data/upgrades/weaponIcon.png", Texture.class);
-		
-		  //Load Tutorial images
-			manager.load("data/ui/slide1.png",Texture.class);
-			manager.load("data/ui/slide2.png",Texture.class);
-			manager.load("data/ui/slide3.png",Texture.class);
-			manager.load("data/ui/slide4.png",Texture.class);
-			manager.load("data/ui/slide5.png",Texture.class);
-			manager.load("data/ui/slide6.png",Texture.class);
-			manager.load("data/ui/slide7.png",Texture.class);
-			 
 		
 		manager.load("data/world/star.png", Texture.class);
 		manager.load("data/mainmenu/mainmenupart1.png", Texture.class);

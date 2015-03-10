@@ -2,9 +2,7 @@ package com.BeefGames.PlutoWasAPlanetOnce.View.Handlers;
 
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Bullet;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Ship;
-import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemies.Elite;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemies.Sniper;
-import com.BeefGames.PlutoWasAPlanetOnce.Upgrades.Turret;
 import com.BeefGames.PlutoWasAPlanetOnce.View.World;
 import com.BeefGames.PlutoWasAPlanetOnce.View.WorldRenderer;
 import com.badlogic.gdx.Gdx;
@@ -124,41 +122,6 @@ public class BulletHandler {
 	}
 	
 	
-	public void Fire(float x , float y,Turret turret){
-
-		float bulletSpeed = 1000f;
-		//double tempx = Double.parseDouble(Float.toString(x));
-		//double tempy = Double.parseDouble(Float.toString(y));
-		double tempx = x - turret.getPosition().x -turret.getWidth()/2;
-		double tempy = y - turret.getPosition().y -turret.getHeight()/2;
-		
-		double angle = calculateAngle(tempx ,tempy);
-		//float tempAngle = (float)angle;
-		
-		Vector2 calcVelocity = new Vector2((float)Math.sin(angle), (float)Math.cos(angle)).scl(Gdx.graphics.getDeltaTime()*bulletSpeed);
-		
-		Texture bullet = worldRenderer.getTexture("playerbullet");
-		//These move the bullet to the end of the turret barrel
-		float x1 = turret.getHeight()/2 * (float)Math.sin(angle);
-		float y1 = turret.getHeight()/2 * (float)Math.cos(angle);
-
-		Vector2 position = new Vector2(turret.getPosition().x + turret.getWidth()/2 + x1 -bullet.getWidth()/2,
-				turret.getPosition().y + turret.getHeight()/2 + y1 - bullet.getHeight()/2);
-
-		Bullet b = new Bullet(position, bulletSpeed, (float)angle, bullet.getWidth(),bullet.getHeight(),
-				calcVelocity,ship.getDamage()*3, bullet.getWidth(),bullet.getHeight());
-
-		//Add bullet to draw list
-		worldRenderer.addDrawn("bullet"+b.hashCode(), "playerbullet", b.getPosition(), new Vector2(b.getWidth()/2,b.getHeight()/2),
-				new Vector2(b.getWidth(),b.getHeight()), new Vector2(1,1),b.getRotation(), new Vector2(0,0), 
-				new Vector2(bullet.getWidth(),bullet.getHeight()),
-				false, false, true);
-		
-		
-		turret.addBullet(b);
-		turret.setAmmo(turret.getAmmo()- 1);
-		audioHandler.turretFire();
-	}
 	
 	public void Fire(float x , float y,Sniper sniper)
 	{
@@ -195,48 +158,7 @@ public class BulletHandler {
 		audioHandler.turretFire();
 	}
 	
-	/**
-	 * 
-	 * Fire an enemy bullet
-	 * @param x X position of target
-	 * @param y Y position of target
-	 * @param firePosition Position being fired from
-	 * @return returns the angle fired at
-	 */
-	public void Fire(float x , float y, Vector2 firePosition, Elite el)
-	{
-		float bulletSpeed = 600f;
-		//double tempx = Double.parseDouble(Float.toString(x));
-		//double tempy = Double.parseDouble(Float.toString(y));
-		double tempx = x - firePosition.x;
-		double tempy = y - firePosition.y;	
-		
-		double angle = calculateAngle(tempx, tempy);
-		//float tempAngle = (float)angle;
-		
-		Vector2 calcVelocity = new Vector2((float)Math.sin(angle), (float)Math.cos(angle)).scl(Gdx.graphics.getDeltaTime()*bulletSpeed);
-		
-		Texture bullet = worldRenderer.getTexture("playerbullet");
-		Vector2 bulletSize = new Vector2(bullet.getWidth(), bullet.getHeight());
-		
-		//these move the bullet to the front of the turret
-		float x1 = el.getTurretSize().y/2 * (float)Math.sin(angle);
-		float y1 = el.getTurretSize().y/2 * (float)Math.cos(angle);
-		
-		Bullet b = new Bullet(new Vector2(firePosition.x - bulletSize.x/2 + x1, firePosition.y-bulletSize.y/2 + y1), bulletSpeed, 
-				(float)angle-90, bulletSize.x , bulletSize.y,calcVelocity,5f, bullet.getWidth(),bullet.getHeight());
-		
-		//Add bullet to draw list
-		worldRenderer.addDrawn("bullet"+b.hashCode(), "eliteBullet", b.getPosition(), new Vector2(b.getWidth()/2,b.getHeight()/2),
-				new Vector2(b.getWidth(),b.getHeight()), new Vector2(1,1),b.getRotation(), new Vector2(0,0), 
-				bulletSize,	false, false, true);
 
-		world.addEnemyBullet(b);
-		
-		audioHandler.turretFire();
-		el.setTurretRotation(calcVelocity.angle()-90);
-		
-	}
 	
 	public double calculateAngle(double x, double y)
 	{

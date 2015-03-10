@@ -27,7 +27,7 @@ public class EndGameScreen implements Screen{
 	
 	private PlutoWasAPlanetOnce game;
 	private Stage stage;
-	private int kills,moneySpent;
+	private int kills;
 	private String time;
 	private SpriteBatch batch;
 	private Skin skin;
@@ -43,12 +43,11 @@ public class EndGameScreen implements Screen{
 	private Screen gs;
 	
 	
-	public EndGameScreen(Screen gs,PlutoWasAPlanetOnce game,int kills,int wavesSurvived, int moneySpent,String time,int score) 
+	public EndGameScreen(Screen gs,PlutoWasAPlanetOnce game,int kills,int wavesSurvived,String time,int score) 
 	{
 		this.score = score;
 		this.game = game;
 		this.kills = kills;
-		this.moneySpent = moneySpent;
 		this.time = time;
 		this.wavesSurvived = wavesSurvived;
 		this.gs = gs;
@@ -102,7 +101,6 @@ public class EndGameScreen implements Screen{
 		
 			stats = new Label("Stats",ls);
 			killsLabel = new Label("Kills : "+ kills,ls);
-			moneyLabel = new Label("Money Spent : " + moneySpent,ls);
 			timeLabel = new Label("Time Taken : " + time,ls);
 			wavesLabel = new Label("Waves Survived : " + wavesSurvived,ls);
 			scoreLabel = new Label("Final Score : " + score,ls);

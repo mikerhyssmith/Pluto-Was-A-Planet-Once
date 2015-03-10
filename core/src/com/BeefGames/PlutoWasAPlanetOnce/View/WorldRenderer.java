@@ -318,8 +318,6 @@ public class WorldRenderer {
 	    newTexture = assetManager.get("data/tokens/armourtoken.png", Texture.class);
 		addTexture("armourtoken", newTexture, TextureFilter.Linear, TextureFilter.Linear);
 		
-	    newTexture = assetManager.get("data/tokens/moneyToken.png", Texture.class);
-		addTexture("moneytoken", newTexture, TextureFilter.Linear, TextureFilter.Linear);
 		
 	    newTexture = assetManager.get("data/CIRCLE.png", Texture.class);
 		addTexture("shipexhaust",newTexture,TextureFilter.Linear,TextureFilter.Linear);
@@ -332,21 +330,6 @@ public class WorldRenderer {
 		
 		newTexture = assetManager.get("data/CIRCLE.png", Texture.class);
 		addTexture("bulletHit",newTexture,TextureFilter.Linear,TextureFilter.Linear);
-		
-		newTexture = assetManager.get("data/protectionBubble.png",Texture.class);
-		addTexture("protectionBubble",newTexture,TextureFilter.Linear,TextureFilter.Linear);
-	
-		newTexture = assetManager.get("data/world/turret.png",Texture.class);
-		addTexture("turret",newTexture,TextureFilter.Linear,TextureFilter.Linear);
-		
-		newTexture = assetManager.get("data/enemies/Elite.png",Texture.class);
-		addTexture("Elite",newTexture,TextureFilter.Linear,TextureFilter.Linear);
-		
-		newTexture = assetManager.get("data/enemies/eliteturret.png",Texture.class);
-		addTexture("eliteTurret",newTexture,TextureFilter.Linear,TextureFilter.Linear);
-
-		newTexture = assetManager.get("data/world/turretbase.png",Texture.class);
-		addTexture("turretBase",newTexture,TextureFilter.Linear,TextureFilter.Linear);
 		
 		newTexture = assetManager.get("data/world/enemybullet.png",Texture.class);
 		addTexture("sniperBullet",newTexture,TextureFilter.Linear,TextureFilter.Linear);

@@ -13,7 +13,7 @@ public class Follower extends Enemy{
 
 	public Follower(Vector2 position,float width, float height,  float rotation, 
 			float speed, float health, int value, float damage, float texWidth, float texHeight) {
-		super(speed,rotation, width, height, position, health, value, damage, texWidth, texHeight);
+		super(speed,rotation, width, height, position, health, damage, texWidth, texHeight);
 		
 	}
 

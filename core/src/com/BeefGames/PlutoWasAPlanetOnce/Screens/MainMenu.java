@@ -28,7 +28,7 @@ public class MainMenu implements Screen {
 	private TextureAtlas atlas;
 	private Skin skin;
 	private SpriteBatch batch;
-	private TextButton startButton,optionsButton,creditsButton;
+	private TextButton startButton,optionsButton;
 
 	private Image title1, title2, planet;
 
@@ -94,15 +94,10 @@ public class MainMenu implements Screen {
 			optionsButton.setX(width/2 - (optionsButton.getWidth()/2));
 			optionsButton.setY(height/2 - 5 );
 			
-			creditsButton = new TextButton("Tutorial",style);
-			creditsButton.setWidth(300);
-			creditsButton.setHeight(80);
-			creditsButton.setX(width/2 - (creditsButton.getWidth()/2));
-			creditsButton.setY(height/2 - (creditsButton.getHeight()) - 10);
+
 			
 			stage.addActor(startButton);
 			stage.addActor(optionsButton);
-			stage.addActor(creditsButton);
 			
 			startButton.addListener(new InputListener()
 			{
@@ -125,23 +120,7 @@ public class MainMenu implements Screen {
             		}))); 
 				}
 			});
-			
-			creditsButton.addListener(new InputListener()
-			{
-				
-				public boolean touchDown(InputEvent event, float x,float y , int pointer, int button)
-				{
-					System.out.println("down");
-					return true;
-				}
-				public void touchUp(InputEvent event, float x,float y , int pointer, int button)
-				{
-					System.out.println("Up");
-					game.getAudioHandler().buttonClick();
-					game.setScreen(new Tutorial(game));
-				}
-	
-			});
+		
 			
 			optionsButton.addListener(new InputListener()
 			{

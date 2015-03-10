@@ -26,8 +26,6 @@ public class Bullet extends MoveableEntity
 	}
 	
 	
-	
-	
 	@Override
 	public void update()
 	{

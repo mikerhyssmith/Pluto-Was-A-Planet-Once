@@ -64,21 +64,6 @@ public class TokenManager {
 						false, false, true);
 				tokenArray.add(ht);
 			}
-			else 
-			{
-				Texture money =  worldRenderer.getTexture("moneytoken");
-				
-				MoneyToken mt = new MoneyToken(new Vector2(position.x - money.getWidth()/2,position.y - money.getHeight()/2),
-						money.getWidth(), money.getHeight(),ship,0, velocity);
-			
-				worldRenderer.addDrawn("token"+mt.hashCode(), "moneytoken", mt.getPosition(),
-						new Vector2(mt.getWidth()/2,mt.getHeight()/2),	new Vector2(mt.getWidth(), mt.getHeight()),
-						new Vector2(1,1), 0, new Vector2(0,0), new Vector2(money.getWidth(), money.getHeight()),
-						false, false, true);
-			
-				tokenArray.add(mt);
-			
-			}
 		}
 	}
 	

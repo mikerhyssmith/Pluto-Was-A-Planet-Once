@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemy;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Ship;
-import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemies.Elite;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemies.Follower;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemies.PlanetScout;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Enemies.Sniper;
@@ -59,17 +58,10 @@ public class WaveManager
 		eliteSpawned = false;
 		System.out.println(waveNumber);
 		System.out.println(eliteLevel);
-		if(waveNumber == eliteLevel)
-			{
-				createEliteWave(renderer, 400 + (level*9),2 + (4*level), 50 + level);
-				waveNumber ++;
-				eliteLevel +=5;
-			}
-			else
-			{
-				setEnemies(level*level, (float)Math.sqrt(level*4)*difficulty, 10, (float)Math.sqrt(level*3)*1.5f, planetPosition, debug);
-				waveNumber++;
-			}	
+
+		setEnemies(level*level, (float)Math.sqrt(level*4)*difficulty, 10, (float)Math.sqrt(level*3)*1.5f, planetPosition, debug);
+		waveNumber++;
+				
 
 	}
 	
@@ -117,36 +109,6 @@ public class WaveManager
 				*/
 			}
 		}
-	}
-	
-	public void createEliteWave(WorldRenderer renderer, float health, float damage, int moneyValue)
-	{
-		float spiralFactor = 150;
-		
-		Texture elite = renderer.getTexture("Elite");
-		
-		Vector2 position = new Vector2(0, spawnManager.getWorldHeight()/2);
-		
-		Elite  el = new Elite(position, elite.getWidth(),elite.getHeight(), spawnManager.getSpeed(),
-				health, moneyValue, damage, world, spiralFactor, world.getWorldSize(), 5, 1000,1, elite.getWidth(),elite.getHeight());
-		
-		renderer.addDrawn("enemy"+ el.hashCode(), "Elite", el.getPosition(), new Vector2(el.getWidth()/2,el.getHeight()/2),
-				new Vector2(el.getWidth(),el.getHeight()), new Vector2(1,1),el.getRotation(), new Vector2(0,0), 
-				new Vector2(elite.getWidth(),elite.getHeight()),
-				false, false, true);
-		
-		Texture turret = renderer.getTexture("eliteTurret");
-		el.setTurretSize(new Vector2(turret.getWidth(), turret.getHeight()));
-		el.setTurretOrigin(new Vector2(turret.getWidth()/2, turret.getHeight()/2));
-		
-		renderer.addDrawn("enemyturret" + el.hashCode(), "eliteTurret", el.getTurretPosition(),
-				el.getTurretOrigin(), el.getTurretSize(),
-				new Vector2(1,1), el.getTurretRotation(), new Vector2(0,0), el.getTurretSize(),
-				false, false, true);
-
-		particleHandler.addExhaust(el);
-		enemies.add(el);
-		eliteSpawned = true;
 	}
 	
 
@@ -266,35 +228,6 @@ public class WaveManager
 				
 				e.advance(Gdx.graphics.getDeltaTime(),target);
 
-				
-				if(e.getType() == "Elite")
-				{
-					if(e.SpawnEnemy())
-					{
-						float ehealth = 5;
-						int evalue = 0;
-						float edamage = 5 + e.getDamage()/5;
-						
-						Texture soldier = renderer.getTexture("Soldier");
-						
-						Vector2 position = new Vector2(e.getPosition().x + e.getWidth()/2,
-								e.getPosition().y + e.getHeight()/2);
-						
-						Soldier s = new Soldier(position, soldier.getWidth()/2,soldier.getHeight()/2, 0,
-								spawnManager.getSpeed(), planetPosition ,ehealth, evalue, edamage, soldier.getWidth(),
-								soldier.getHeight());
-						
-						particleHandler.addExhaust(s);
-						
-						enemies.add(s);
-						particleHandler.addEliteSpawn(s);
-						renderer.addDrawn("enemy"+ s.hashCode(), "Soldier", s.getPosition(), new Vector2(s.getWidth()/2,s.getHeight()/2),
-								new Vector2(s.getWidth(),s.getHeight()), new Vector2(1,1),s.getRotation(), new Vector2(0,0), 
-								new Vector2(renderer.getTexture("Soldier").getWidth(),renderer.getTexture("Soldier").getHeight()),
-								false, false, true);
-					}
-				}
-				
 		}
     }
 

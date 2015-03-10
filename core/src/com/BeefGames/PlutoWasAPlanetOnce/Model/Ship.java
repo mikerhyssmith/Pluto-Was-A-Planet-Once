@@ -10,12 +10,12 @@ import com.badlogic.gdx.utils.Array;
 public class Ship extends MoveableEntity{
 
 	private Array<Bullet> shipBullets = new Array<Bullet>(); // <> arrow type
-	private int playerMoney =0;
 	private float playerArmour = 0;
 	private float maxArmour = 0;
 	private float weaponCooldown;
 	private float weaponDamage;
 	private Boolean move;
+	private float playerLevel = 0;
 	
 	private Boolean shootSide = false;
 	
@@ -86,7 +86,7 @@ public class Ship extends MoveableEntity{
 		super.update();
 	}
 	
-	public void updateMotion()
+	private void updateMotion()
 	{
         if(move)
         {
@@ -125,12 +125,6 @@ public class Ship extends MoveableEntity{
 		shipBullets.add(b);
 	}
 	
-	public int getMoney(){
-		return this.playerMoney;
-	}
-	public void setMoney(int money){
-		this.playerMoney = money;
-	}
 	public float getArmour(){
 		return this.playerArmour;
 	}
@@ -161,6 +155,12 @@ public class Ship extends MoveableEntity{
 	public float getCooldown()
 	{
 		return weaponCooldown;
+	}
+	public void setLevel(float level){
+		playerLevel = level;
+	}
+	public float getLevel(){
+		return playerLevel;
 	}
 	public void setCooldown(float cooldown)
 	{

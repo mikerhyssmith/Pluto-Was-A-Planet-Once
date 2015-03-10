@@ -12,7 +12,7 @@ public class Soldier extends Enemy
 	
 	public Soldier(Vector2 position,float width, float height,  float rotation,float speed 
 			,Vector2 planetPosition, float health, int value, float damage, float texWidth, float texHeight) {
-		super(speed, rotation, width, height, position, health, value, damage, texWidth, texHeight);
+		super(speed, rotation, width, height, position, health, damage, texWidth, texHeight);
 		
 		this.planetPosition = planetPosition;
 	}

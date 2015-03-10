@@ -4,8 +4,6 @@ import com.BeefGames.PlutoWasAPlanetOnce.PlutoWasAPlanetOnce;
 import com.BeefGames.PlutoWasAPlanetOnce.Model.Ship;
 import com.BeefGames.PlutoWasAPlanetOnce.Screens.EndGameScreen;
 import com.BeefGames.PlutoWasAPlanetOnce.Screens.GameScreen;
-import com.BeefGames.PlutoWasAPlanetOnce.Screens.UpgradesScreen;
-import com.BeefGames.PlutoWasAPlanetOnce.Upgrades.Nuke;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.InputHandler;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.MinimapHandler;
 import com.BeefGames.PlutoWasAPlanetOnce.View.Handlers.TimeHandler;
@@ -30,6 +28,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class GameHUD {
+	
 	private PlutoWasAPlanetOnce game;
 	private float width, height;
 	private World gameWorld;
@@ -60,7 +59,7 @@ public class GameHUD {
 	
 	//Variables for text on HUD
 	private BitmapFont hudFont;
-	private Label turretAmmo,time, gameLost, endofWave, killsLabel, moneyLabel, timeLabel, cooldownLabel;
+	private Label time, gameLost, endofWave, killsLabel, timeLabel, cooldownLabel;
 
 
 	private InputHandler inputHandler;
@@ -81,8 +80,7 @@ public class GameHUD {
 	private boolean paused;
 	private Image pauseButton;
 
-	//Nuke icon variables
-	private Image nukeButton;
+
 	private TimeHandler timeHandler;
 	
 	private boolean pauseCreated = false;
@@ -142,10 +140,7 @@ public class GameHUD {
 		gameLost.setAlignment(Align.center);
 		gameLost.setVisible(false);
 		hudStage.addActor(gameLost);
-		
-		turretAmmo = new Label("Turret Ammo",ls);
-		turretAmmo.setVisible(false);
-		hudStage.addActor(turretAmmo);
+	
 		
 		time = new Label("Time Elapse" + timeHandler.getFormattedTime(timeHandler.getTime()),ls);
 		time.setX(width - width/4);
@@ -170,13 +165,6 @@ public class GameHUD {
 		killsLabel.setVisible(false);
 		hudStage.addActor(killsLabel);
 		
-		moneyLabel = new Label("",ls);
-		moneyLabel.setX(Gdx.graphics.getWidth()/4);
-		moneyLabel.setY(Gdx.graphics.getHeight()/2 - killsLabel.getHeight() -30);
-		moneyLabel.setWidth(width);
-		moneyLabel.setAlignment(Align.center);
-		moneyLabel.setVisible(false);
-		hudStage.addActor(moneyLabel);
 		
 		timeLabel = new Label("Time till next Wave:",ls);
 		timeLabel.setX(0);
@@ -240,33 +228,6 @@ public class GameHUD {
 	    });
 
 	    
-	    //Set up nuke button
-	    nukeButton = new Image(new TextureRegionDrawable(hudAtlas.findRegion("nuke#0")));
-	    updateNukes();
-	    nukeButton.setPosition(width -(2* nukeButton.getWidth()), height/2);
-	    hudStage.addActor(nukeButton);
-	    nukeButton.addListener(new InputListener()
-	    {
-	    	public boolean touchDown(InputEvent event, float x,float y , int pointer, int button)
-	    	{ return true; }
-	    	
-			public void touchUp(InputEvent event, float x,float y , int pointer, int button)
-			{
-				Array<Nuke> nukeArray = gameWorld.getInputHandler().getNukes();
-				
-				if(nukeArray.size > 0)
-				{
-					Nuke n = nukeArray.first();
-					n.detonate(ship);
-					System.out.println("NUKE");
-					gameWorld.getParticleHandler().addNuke(ship);
-					nukeArray.removeIndex(0);
-					updateNukes();
-				}
-			}
-	    });
-	    
-		turretAmmo.setPosition(width -(1.5f* turretAmmo.getWidth()), height/2 + nukeButton.getHeight() + (2*turretAmmo.getHeight()));
 
 	}
 	
@@ -286,7 +247,7 @@ public class GameHUD {
 		//Print losing text when the game ends
 	    lost = gameWorld.getStatus();
 	    if(lost && gameLost.isVisible() == false ){
-	    	game.setScreen(new EndGameScreen(game.getScreen(),game,gameWorld.getTotalKills(),gameWorld.getLevel(),gameWorld.getMoneySpent(),timeHandler.getFormattedTime(timeHandler.getTime()),calculateScore()));
+	    	game.setScreen(new EndGameScreen(game.getScreen(),game,gameWorld.getTotalKills(),gameWorld.getLevel(),timeHandler.getFormattedTime(timeHandler.getTime()),calculateScore()));
 	    	
 	    }
 	    	
@@ -320,16 +281,12 @@ public class GameHUD {
 	    if(gameWorld.getWaveStatus() == 1)
 	    {
 	    	setActionBeginTime();
-	    	moneyAfter = ship.getMoney();
-	    	moneyBefore = gameWorld.getMoneyBefore();
 	    	timeSet = true;
 	    	kills = gameWorld.getKills();
 	    	endofWave.setText("End of Wave: " + gameWorld.getLevel());
 	    	killsLabel.setText("Enemies Killed: " + kills);
-	    	moneyLabel.setText("Money Earned " + (moneyAfter - moneyBefore));
 	    	killsLabel.setVisible(true);
 	    	endofWave.setVisible(true);
-	    	moneyLabel.setVisible(true);
 
 	    	long elapsedTime = ((actionBeginTime - TimeUtils.nanoTime()) / 1000000000);
 	    	
@@ -338,7 +295,6 @@ public class GameHUD {
 	    		timeSet = false;
 	    		killsLabel.setVisible(false);
 	    		endofWave.setVisible(false);
-	    		moneyLabel.setVisible(false);
 	    		
 	    		ship.setForce(new Vector2(0,0));
 				ship.setMomentum(new Vector2(0,0) );
@@ -347,7 +303,7 @@ public class GameHUD {
 	    		
 	    		gameWorld.removeAllBullets();
 	    		
-	    		game.setScreen(new UpgradesScreen(game,game.getScreen(),gameWorld));
+	    		//game.setScreen(new UpgradesScreen(game,game.getScreen(),gameWorld));
 	    	}
 	    }
 	    
@@ -360,15 +316,7 @@ public class GameHUD {
 	    	timeLabel.setVisible(false);
 	    }
 	    
-	    if(gameWorld.getTurretActive()){
-	    	
-	    	turretAmmo.invalidate();
-	    	turretAmmo.setText("Turret Ammo: "+ gameWorld.getTurret().getAmmo());
-	    	turretAmmo.setVisible(true);
-	    }
-	    else {
-	    	turretAmmo.setVisible(false);
-	    }
+
 		
 	   //Check for shooting
 	    inputHandler.move();
@@ -420,30 +368,6 @@ public class GameHUD {
 		worldRenderer.getSpriteBatch().end();
 	}
 	
-	/**
-	 * Updates the nuke icon on the HUD
-	 */
-	public void updateNukes()
-	{
-		int nukes = gameWorld.getInputHandler().getNukes().size;
-		switch(nukes){
-		case 0: nukeButton.setDrawable(new TextureRegionDrawable(hudAtlas.findRegion("nuke#0")));
-		nukeButton.invalidate();
-		break;
-		case 1: nukeButton.setDrawable(new TextureRegionDrawable(hudAtlas.findRegion("nuke#1")));
-		nukeButton.invalidate();
-		break;
-		case 2: nukeButton.setDrawable(new TextureRegionDrawable(hudAtlas.findRegion("nuke#2")));
-		nukeButton.invalidate();
-		break;
-		case 3: nukeButton.setDrawable(new TextureRegionDrawable(hudAtlas.findRegion("nuke#3")));
-		nukeButton.invalidate();
-		break;
-		default: System.out.println("ERROR-more than max number of nukes");
-		
-		}
-		
-	}
 	
 	public void dispose()
 	{
@@ -483,11 +407,9 @@ public class GameHUD {
 	public int calculateScore(){
 		int kills = gameWorld.getTotalKills();
 		int level = gameWorld.getLevel();
-		int turretKills = gameWorld.getTurretKills();
-		int eliteKills = gameWorld.getEliteKills();
 		int upgradeNumber = gameWorld.getUpgrade();
 		
-		int score = (kills*2) + (level+3) + turretKills + (eliteKills*4) + upgradeNumber;
+		int score = (kills*2) + (level+3) + upgradeNumber;
 		
 		return score;
 		
